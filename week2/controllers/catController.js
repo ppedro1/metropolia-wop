@@ -8,13 +8,14 @@ const addCat = async (req, res) => {
     const catObject = {
         name: req.body.name,
         age: req.body.age || '0',
-        weight: req.body.weigth || '0.0',
+        weight: req.body.weight || '0.0',
         owner: req.body.owner || '',
         filename: filepath
     }
 
     await catModel.addCat(catObject)
-    res.status(200).json(catObject)
+   // res.status(200).json(catObject)
+   res.redirect('/')
 }
 
 const getCats = async (req, res) => {
