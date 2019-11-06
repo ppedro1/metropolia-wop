@@ -4,13 +4,13 @@
 const catModel = require('../models/catModel')
 
 const addCat = async (req, res) => {
-    console.log(req.body)
+    var filepath = 'uploads/' + (req.body.image.filename || '') 
     const catObject = {
         name: req.body.name,
         age: req.body.age || '0',
         weight: req.body.weigth || '0.0',
         owner: req.body.owner || '',
-        filename: req.body.filename || ''
+        filename: filepath
     }
 
     await catModel.addCat(catObject)
