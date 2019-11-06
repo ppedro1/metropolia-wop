@@ -2,24 +2,33 @@
 // catController
 
 const catModel = require('../models/catModel')
-const cats = catModel.cats
 
-const getCats = (req, res) => {
-    res.send(cats)
+const addCat = async (req, res) => {
+    var filepath = 'uploads/' + (req.body.image.filename || '') 
+    const catObject = {
+        name: req.body.name,
+        age: req.body.age || '0',
+        weight: req.body.weigth || '0.0',
+        owner: req.body.owner || '',
+        filename: filepath
+    }
+
+    await catModel.addCat(catObject)
+    res.status(200).json(catObject)
 }
 
-const getCat = (req, res) => {
-    const catById = cats.find(a => a.id === req.params.id)
-    if (typeof catById !== 'undefined') {
-        res.send(catById)
-    } else {
-        res.status(404).json({
-            'error': `cat with id ${ req.params.id } not found`
-        })
-    }
+const getCats = async (req, res) => {
+    const cats = await catModel.getAllCats()
+    res.status(200).json(cats)
+}
+
+const getCat = async (req, res) => {
+   const cat = await catModel.getCatById(req.params.id)
+   res.status(200).json(cat)
 }
 
 module.exports = {
+    addCat,
     getCats,
     getCat
 }
