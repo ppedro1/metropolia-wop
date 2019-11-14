@@ -32,9 +32,29 @@ const getCatById = async (id) => {
     }
 }
 
+const editCat = async (catObject) => {
+    try {
+        await dbPromise.query(
+            'UPDATE wop_cat SET name = ?, age = ?, weight = ?, owner = ?, filename = ? WHERE cat_id = ?',
+            [catObject.name, catObject.age, catObject.weight, catObject.owner, catObject.filename, catObject.id]
+        )
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const deleteCat = async (id) => {
+    try {
+        await dbPromise.query('DELETE FROM wop_cat WHERE cat_id = ?', [id])
+    } catch (e) {
+        console.log(e)
+    }
+}
 
 module.exports = {
     addCat,
     getAllCats,
-    getCatById
+    getCatById,
+    editCat,
+    deleteCat
 }

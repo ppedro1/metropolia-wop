@@ -1,6 +1,7 @@
-'use strict';
 const multer = require('multer')
-const upload = multer({ dest: 'public/uploads/' })
+const upload = multer({
+    dest: 'public/uploads/'
+})
 const Router = require('express').Router()
 const catController = require('../controllers/catController')
 
@@ -11,5 +12,7 @@ Router.post('/', upload.single('image'), (req, res, next) => {
     next()
 })
 Router.post('/', catController.addCat)
+Router.put('/:id', catController.editCat)
+Router.delete('/:id', catController.deleteCat)
 
 module.exports = Router

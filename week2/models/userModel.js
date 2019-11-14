@@ -22,14 +22,35 @@ const getAllUsers = async () => {
 const getUserById = async (id) => {
     try {
         const [request] = await dbPromise.query('SELECT user_id, name, email FROM wop_user WHERE user_id = ?', [id])
-        return request
+        return request[0]
     } catch (e) {
         console.log('error: ', e)
+    }
+}
+
+const editUser = async (userObject) => {
+    try {
+        await dbPromise.query(
+            'UPDATE wop_user SET name = ?, email = ? WHERE user_id = ?',
+            [userObject.name, userObject.email, userObject.id]
+        )
+    } catch (e) {
+        console.log('error', e)
+    }
+}
+
+const deleteUser = async (id) => {
+    try {
+        await dbPromise.query('DELETE FROM wop_user WHERE user_id = ?', [id])
+    } catch (e) {
+        console.log('error', e)
     }
 }
 
 module.exports = {
     addUser,
     getAllUsers,
-    getUserById
+    getUserById,
+    editUser,
+    deleteUser
 }

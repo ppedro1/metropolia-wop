@@ -1,33 +1,73 @@
-'use strict'
-
 const userModel = require('../models/userModel')
 
+const getUsers = async (req, res) => {
+    try {
+        const users = await userModel.getAllUsers()
+        res.status(200).json(users)
+    } catch(e) {
+        console.log(e)
+    }
+    
+}
+
+const getUser = async (req, res) => {
+    try {
+        const user = await userModel.getUserById(req.params.id)
+        res.status(200).json(user)
+    } catch (e) {
+        console.log('error', e)
+    }
+    
+}
+
 const addUser = async (req, res) => {
-    console.log(req.body)
     const userObject = {
         name: req.body.name,
         password: req.body.passwd,
         email: req.body.email || ''
     }
 
-    await userModel.addUser(userObject)
+    try {
+        await userModel.addUser(userObject)
+        res.status(200).json(userObject)
+    } catch (e) {
+        console.log('error', e)
+    }
 
     delete userObject.password
-    res.status(200).json(userObject)
 }
 
-const getUsers = async (req, res) => {
-    const users = await userModel.getAllUsers()
-    res.status(200).json(users)
+const editUser = async (req, res) => {
+    const newUserData = {
+        id: req.params.id,
+        name: req.body.name,
+        email: req.body.email,
+    }
+
+    try {
+        await userModel.editUser(req.params.id)
+        res.status(200).json(newUserData)
+    } catch (e) {
+        console.log('error', e)
+    }
 }
 
-const getUser = async (req, res) => {
-    const user = await userModel.getUserById(req.params.id)
-    res.status(200).json(user)
+const deleteUser = async (req, res) => {
+    console.log('deleteUser', req.params.id)
+    try {
+        await userModel.deleteUser(req.params.id)
+        res.status(200).json({
+            msg: `User with user_id ${req.params.id} deleted`
+        })
+    } catch (e) {
+        console.log('error', e)
+    }
 }
 
 module.exports = {
-    addUser,
     getUsers,
-    getUser
+    getUser,
+    addUser,
+    editUser,
+    deleteUser
 }
