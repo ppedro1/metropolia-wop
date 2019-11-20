@@ -9,15 +9,15 @@ const getCat = async () => {
   for (const cat of cats) {
     const user = await getUser(cat.owner);
     ul.innerHTML += `
-    <li>
-        <h2>${cat.name}</h2>
-        <figure>
-            <img src="${cat.filename}" class="resp">
-        </figure>
-        <p>Age: ${cat.age}</p>
-        <p>Weight: ${cat.weight}kg</p>
-        <p>Owner: ${user.name}</p>
-    </li>
+        <li>
+            <h2>${cat.name}</h2>
+            <figure>
+                <img src="${cat.filename}" class="resp">
+            </figure>
+            <p>Age: ${cat.age}</p>
+            <p>Weight: ${cat.weight}kg</p>
+            <p>Owner: ${user.name}</p>
+        </li>
     `;
   }
 };
@@ -25,6 +25,7 @@ const getCat = async () => {
 const getUser = async (id) => {
   const response = await fetch(url + '/user/' + id);
   const user = await response.json();
+  console.log(user)
   return user;
 };
 

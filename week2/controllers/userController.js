@@ -1,55 +1,73 @@
-'use strict'
-
 const userModel = require('../models/userModel')
-const users = userModel.users
 
+const getUsers = async (req, res) => {
+    try {
+        const users = await userModel.getAllUsers()
+        res.status(200).json(users)
+    } catch(e) {
+        console.log(e)
+    }
+    
+}
 
-// add user if information is valid and return 400 if not
-const addUser = (req, res) => {
-    if (req.body.name.length > 4 && req.body.passwd.length > 4) {
-        const newId = Math.floor(Math.random() * 12356)
-        const userJSON = {
-            id: `${newId}`,
-            username: req.body.name,
-            password: req.body.passwd,
-            email: req.body.email || ''
-        }
+const getUser = async (req, res) => {
+    try {
+        const user = await userModel.getUserById(req.params.id)
+        res.status(200).json(user)
+    } catch (e) {
+        console.log('error', e)
+    }
+    
+}
 
-        users.push(userJSON)
+const addUser = async (req, res) => {
+    const userObject = {
+        name: req.body.name,
+        password: req.body.passwd,
+        email: req.body.email || ''
+    }
 
-        delete userJSON.password
+    try {
+        await userModel.addUser(userObject)
+        res.status(200).json(userObject)
+    } catch (e) {
+        console.log('error', e)
+    }
 
-        res.status(200).json(userJSON)
-    } else {
-        res.status(400).json({
-            'error': 'Username or password too short (min 4 characters)'
-        })
+    delete userObject.password
+}
+
+const editUser = async (req, res) => {
+    const newUserData = {
+        id: req.params.id,
+        name: req.body.name,
+        email: req.body.email,
+    }
+
+    try {
+        await userModel.editUser(req.params.id)
+        res.status(200).json(newUserData)
+    } catch (e) {
+        console.log('error', e)
     }
 }
-// get all users
-const getUsers = (req, res) => {
-    let returnUsers = users
-    users.forEach(user => {
-        delete user.password
-    })
-    res.send(returnUsers)
-}
 
-// get an user by id (string) and return 404 if not found
-const getUser = (req, res) => {
-    const userById = users.find(a => a.id === req.params.id)
-    if (typeof userById !== 'undefined') {
-        delete userById.password
-        res.status(200).json(userById)
-    } else {
-        res.status(404).json({
-            'error': `no user with id ${ req.params.id } found`
+const deleteUser = async (req, res) => {
+    console.log('deleteUser', req.params.id)
+    try {
+        await userModel.deleteUser(req.params.id)
+        res.status(200).json({
+            msg: `User with user_id ${req.params.id} deleted`
         })
+    } catch (e) {
+        console.log('error', e)
     }
 }
 
 module.exports = {
-    addUser,
     getUsers,
-    getUser
+    getUser,
+    addUser,
+    editUser,
+    deleteUser
 }
