@@ -42,10 +42,10 @@ const addCat = async (req, res) => {
 const editCat = async (req, res) => {
     console.log('body', req.body)
 
-    const [cat] = await catModel.getCatById(req.params.id)
+    const [cat] = await catModel.getCatById(req.body.id)
 
     const newCatData = {
-        id: req.params.id,
+        id: req.body.id,
         name: req.body.name || cat.name,
         age: req.body.age || cat.age,
         weight: req.body.weight || cat.weight,
@@ -54,8 +54,8 @@ const editCat = async (req, res) => {
     }
 
     try {
-        await catModel.editCat(newCatData)
-        res.status(200).json(newCatData)
+        const [cat] = await catModel.editCat(newCatData)
+        res.status(200).json(cat)
     } catch (e) {
         console.log(e)
     }

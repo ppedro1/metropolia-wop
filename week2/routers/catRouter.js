@@ -12,7 +12,7 @@ Router.post('/', upload.single('image'), (req, res, next) => {
     next()
 })
 Router.post('/', catController.addCat)
-Router.put('/:id', catController.editCat)
+Router.put('/', catController.editCat)
 Router.delete('/:id', catController.deleteCat)
 
 module.exports = Router
