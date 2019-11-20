@@ -8,12 +8,18 @@ const ul = document.querySelector('ul');
 const userLists = document.querySelectorAll('.add-owner');
 
 // create cat cards
-const createCatCards = (cats) => {
+const createCatCards = async (cats) => {
+  const getUsers = await fetch('http://localhost:3000/user')
+  const users = await getUsers.json()
   // clear ul
   ul.innerHTML = '';
   cats.forEach((cat) => {
+    const catOwner = users.filter(a => a.user_id === cat.owner)
+    cat.ownername = catOwner[0].name
+    
     // create li with DOM methods
     const img = document.createElement('img');
+
     img.src = url + '/' + cat.filename;
     img.alt = cat.name;
     img.classList.add('resp');
@@ -30,7 +36,7 @@ const createCatCards = (cats) => {
     p2.innerHTML = `Weight: ${cat.weight}kg`;
 
     const p3 = document.createElement('p');
-    p3.innerHTML = `Owner: ${cat.ownername}`;
+    p3.innerHTML = `Owner: ${ cat.ownername }`;
 
     // add selected cat's values to modify form
     const modButton = document.createElement('button');
@@ -81,6 +87,7 @@ const getCat = async () => {
   try {
     const response = await fetch(url + '/cat');
     const cats = await response.json();
+    console.log('cats', cats)
     createCatCards(cats);
   }
   catch (e) {
