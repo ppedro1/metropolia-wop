@@ -16,7 +16,7 @@ const addCat = async (catObject) => {
 
 const getAllCats = async () => {
     try {
-        const [request] = await dbPromise.query('SELECT *, u.name FROM wop_cat JOIN user u ON ')
+        const [request] = await dbPromise.query('SELECT * FROM wop_cat')
         return request
     } catch (e) {
         console.log('error: ', e)
