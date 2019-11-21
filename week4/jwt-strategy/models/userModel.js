@@ -10,6 +10,15 @@ const addUser = async (userObject) => {
     }
 }
 
+const getUserLogin = async (params) => {
+    try {
+        const [rows] = await dbPromise.execute('SELECT user_id, name, email FROM wop_user WHERE email = ? AND password = ?', params)
+        return rows
+    } catch (e) {
+        console.log(e.message)
+    }
+}
+
 const getAllUsers = async () => {
     try {
         const [request] = await dbPromise.query('SELECT user_id, name, email FROM wop_user')
@@ -49,6 +58,7 @@ const deleteUser = async (id) => {
 
 module.exports = {
     addUser,
+    getUserLogin,
     getAllUsers,
     getUserById,
     editUser,
