@@ -19,7 +19,7 @@ const authRouter = require('./routers/authRouter')
 const userRouter = require('./routers/userRouter')
 const catRouter = require('./routers/catRouter')
 
-app.use('/login', authRouter)
+app.use('/auth', authRouter)
 app.use('/cat', passport.authenticate('jwt', { session: false }), catRouter)
 app.use('/user', passport.authenticate('jwt', { session: false }), userRouter)
 
